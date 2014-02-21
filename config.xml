@@ -1,0 +1,43 @@
+<config>
+	<program device="/dev/ttyUSB0" host="" port="12345"/>
+	<devices>
+		<device id="1" name="PC" description="PC Controller"/>
+		<device id="3" name="TH_1" description="Thermostat Bureau"/>
+		<device id="4" name="Chaudiere" description="Relay switch chaudière" />
+	</devices>
+<!--	<rules>
+		<rule>
+			<description>
+				Allumer
+			</description>
+			<condition>
+				zw.Chaudiere.id and Timer and val[0]=="on delay"
+			</condition>
+			<action>
+				zw.Chaudiere.BasicSet(1);
+			</action>
+		</rule>
+		<rule>
+			<description>
+				Eteindre
+			</description>
+			<condition>
+				zw.Chaudiere.id and Timer and val[0]=="off delay"
+			</condition>
+			<action>
+				zw.Chaudiere.BasicSet(0);
+			</action>
+		</rule>
+	</rules>
+	<startuprules>
+		<startuprule>
+			<description>
+				Allumer puis eteindre
+			</description>
+			<action>
+				zw.Chaudiere.BasicSet(1); zw.Chaudiere.addTimer("off delay", 10); zw.Chaudiere.addTimer("on delay", 20);
+			</action>
+		</startuprule>
+	</startuprules>
+-->
+</config>
