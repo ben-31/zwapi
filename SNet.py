@@ -13,7 +13,7 @@ import threading, time, socket, os, sys, StringIO
 
 import ZWApi, STimer, log
 
-###/# This sign marks the commented code for outout redirect during the command execution
+# ##/# This sign marks the commented code for outout redirect during the command execution
 
 class NetConfig:
 	def __init__(self):
@@ -24,17 +24,17 @@ class NetConfig:
 		self.cli = []
 
 # Net server thread
-class NetServThread ( threading.Thread ):
-        def run(self):
+class NetServThread (threading.Thread):
+	def run(self):
 		netServ()
 
 # Net client thread
-class NetCliThread ( threading.Thread ):
+class NetCliThread (threading.Thread):
 	def setCli(self, cliSock, cliAddr):
 		self.cliSock = cliSock
 		self.cliAddr = cliAddr
 
-        def run(self):
+	def run(self):
 		netCli(self.cliSock, self.cliAddr, self)
 
 N = NetConfig()
@@ -52,7 +52,7 @@ def init(host, port, callback_function, rules_nspace):
 def netServ():
 	try:
 		N.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		N.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # this is not to have "Addres is already in use"
+		N.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # this is not to have "Addres is already in use"
 		N.sock.bind((N.host, N.port))
 		N.sock.listen(10)
 	except Exception, inst:
@@ -62,10 +62,10 @@ def netServ():
 	while 1:
 		try:
 			(cliSock, cliAddr) = N.sock.accept()
-        		C = NetCliThread()
-	        	C.setCli(cliSock, cliAddr)
-	        	C.start()
-        		N.cli.append(C)
+			C = NetCliThread()
+			C.setCli(cliSock, cliAddr)
+			C.start()
+			N.cli.append(C)
 		except:
 			continue
 		time.sleep(0.01)
@@ -76,16 +76,16 @@ def netCli(cliSock, cliAddr, cliThread):
 	cmd = cliSock.recv(4096).lstrip().rstrip()
 	log.info("Net cmd = %s" % cmd)
 	redirected = StringIO.StringIO()
-	
+
 	nspace = dict({ "addEvent": N.callback_func }, **N.rules_nspace)
 	try:
 		sys.stdout = redirected
-       		exec cmd in nspace
+		exec cmd in nspace
 	except Exception, inst:
-	        log.exception(inst, "Cmd: %s" % cmd)
+		log.exception(inst, "Cmd: %s" % cmd)
 	sys.stdout = sys.__stdout__
 	output = redirected.getvalue()
-	redirected.close()        
+	redirected.close()
 	print(output)
 	cliSock.send(output)
 	cliSock.close()

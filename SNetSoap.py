@@ -10,6 +10,7 @@
 """
 
 import threading, time, SOAPpy
+from M2Crypto import SSL
 
 class NetConfig:
 	def __init__(self):
@@ -17,6 +18,8 @@ class NetConfig:
 		self.rules_nspace = None
 		self.port = 12080
 		self.host = ""
+		self.port_SSL = 443
+		self.host_SSL = ""
 		self.cli = []
 
 # Net server thread
@@ -57,7 +60,9 @@ def etatTemperature():
 	return "22"
 
 def netServ():
-	server = SOAPpy.SOAPServer((N.host, N.port))
+	ssl_context = SSL.Context()
+	ssl_context.load_cert('server.pem')
+	server = SOAPpy.SOAPServer((N.host, N.port), ssl_context=ssl_context)
 	server.registerFunction(etatChaudiere)
 	server.registerFunction(eteindreChaudiere)
 	server.registerFunction(allumerChaudiere)

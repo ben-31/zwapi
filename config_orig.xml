@@ -1,0 +1,76 @@
+<config>
+	<program device="/dev/ttyUSB0" host="" port="12345"/>
+	<devices>
+		<device id="1" name="SIS" description=""/>
+		<device id="2" name="PC" description=""/>
+		<device id="3" name="Virt1" description=""/>
+		<device id="4" name="Virt2" description=""/>
+		<device id="5" name="Duwi" description="" association="Ever,Virt1"/>
+		<device id="6" name="Ever" description=""/>
+		<device id="7" name="Qees" description="" association="Virt1;PC;Ever;Virt2"/>
+		<device id="8" name="Door" description="" association="Virt1"/>
+		<device id="9" name="Relay" description="" association="Virt1"/>
+<!--
+		<device id="5" name="ez" description=""/>
+		<device id="6" name="Smoke" description=""/>
+		<device id="7" name="Water" description=""/>
+		<device id="8" name="Siren" description=""/>
+		<device id="10" name="Motion" description=""/>
+-->
+	</devices>
+	<rules>
+<!--
+		<rule>
+			<condition>
+				OnOff and sNode==zw.Duwi.id and dNode==zw.Virt1.id and val[0]==0xff
+			</condition>
+			<action>
+				zw.Relay.mode = (1-zw.Relay.mode) if zw.Relay.isDefined("mode") else 0; zw.Relay.BasicSet(mode*0xff) #; zw.Relay2.BasicSet((1-mode)*0xff) 
+			</action>
+		</rule>
+		<rule>
+			<condition>
+				OnOff and sNode==zw.Duwi.id and dNode==zw.Virt1.id and val[0]==0
+			</condition>
+			<action>
+				zw.Relay.BasicSet(0x00) ##; zw.Relay2.BasicSet(0x00)
+			</action>
+		</rule>
+-->
+
+		<rule>
+			<condition>
+				OnOff and sNode==zw.Door.id and dNode==zw.Virt1.id
+			</condition>
+			<action>
+				zw.Ever.BasicSet(val[0]) 
+			</action>
+		</rule>
+		<rule>
+			<condition>
+				(DimBeginUp or DimBeginDown) and (sNode==zw.Qees.id or sNode==zw.Duwi.id) and dNode==zw.Virt1.id
+			</condition>
+			<action>
+				zw.Qees.d = +3 if DimBeginUp else -3; zw.Qees.dd = zw.Qees.dd if zw.Qees.isDefined("dd") else 0; zw.Qees.addTimer("volume", 0.1)
+			</action>
+		</rule>
+		<rule>
+			<condition>
+				DimEnd and (sNode==zw.Qees.id or sNode==zw.Duwi.id) and dNode==zw.Virt1.id
+			</condition>
+			<action>
+				zw.Qees.d = 0; zw.Qees.removeTimer("volume")
+			</action>
+		</rule>
+		<rule>
+			<condition>
+				Timer and sNode==zw.Qees.id and val[0]=="volume" and zw.Qees.isDefined("d") and zw.Qees.d!=0 and zw.Qees.isDefined("dd")
+			</condition>
+			<action>
+				zw.Qees.dd += zw.Qees.d; zw.Qees.dd = 100 if zw.Qees.dd &gt; 100 else (0 if zw.Qees.dd &lt; 0 else zw.Qees.dd); os.system("amixer -c 0 sset Master,0 " + str(zw.Qees.dd) + "%"); zw.Qees.addTimer("volume", 0.1)
+			</action>
+		</rule>
+	</rules>
+	<startuprules>
+	</startuprules>
+</config>

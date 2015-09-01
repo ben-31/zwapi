@@ -4,6 +4,7 @@
 		<device id="1" name="PC" description="PC Controller"/>
 		<device id="3" name="TH_1" description="Thermostat Bureau"/>
 		<device id="4" name="Chaudiere" description="Relay switch chaudière" />
+		<device id="5" name="Bureau" description="Interrupteur bureau" />
 	</devices>
 <!--	<rules>
 		<rule>
