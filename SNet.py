@@ -95,3 +95,5 @@ def exit():
 	N.sock.close()
 	for c in N.cli:
 		c.cliSock.close()
+
+
