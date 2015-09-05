@@ -61,8 +61,12 @@ def etatTemperature():
 
 def netServ():
 	ssl_context = SSL.Context()
-	ssl_context.load_cert('server.pem')
-	server = SOAPpy.SOAPServer((N.host, N.port), ssl_context=ssl_context)
+	try:
+		ssl_context.load_cert('server.pem')
+		server = SOAPpy.SOAPServer((N.host, N.port), ssl_context=ssl_context)
+	except:
+		ssl_context = None
+		server = SOAPpy.SOAPServer((N.host, N.port))
 	server.registerFunction(etatChaudiere)
 	server.registerFunction(eteindreChaudiere)
 	server.registerFunction(allumerChaudiere)
