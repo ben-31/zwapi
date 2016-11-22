@@ -11,7 +11,7 @@
 
 import threading, time, socket, os, sys, StringIO
 
-import ZWApi, STimer, log
+import log
 
 # ##/# This sign marks the commented code for outout redirect during the command execution
 
@@ -91,7 +91,7 @@ def netCli(cliSock, cliAddr, cliThread):
 	cliSock.close()
 	N.cli.remove(cliThread)
 
-def exit():
+def _exit():
 	N.sock.close()
 	for c in N.cli:
 		c.cliSock.close()

@@ -267,7 +267,7 @@ def VirtualValue(vNodeId, NodeId):
 
 def Quit():
 	log.info("\nEnding due to KeyboardInterrupt")
-	SNet.exit()
+	SNet._exit()
 	os._exit(0)
 
 # Wait for events in the queue and execute them
