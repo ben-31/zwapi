@@ -14,7 +14,7 @@ import xml.dom.minidom
 import collections
 import threading
 
-import ZWApi, STimer, SNet, log, SNetSoap
+import ZWApi, STimer, SNet, log, SNetSoap, SNetREST
 
 config_file = "./config.xml"
 
@@ -318,6 +318,7 @@ try:
 	STimer.init(Poll)
 	SNet.init(net_host, net_port, Poll, dict(rules_nspace, **rules_events))
 	SNetSoap.init(net_host, 12080, Poll, dict(rules_nspace, **rules_events))
+	SNetREST.init(net_host, 55000, Poll, dict(rules_nspace, **rules_events))
 	ZWApi.init(device, Poll, ReqReply, VirtualValue)
 
 	time.sleep(10)
