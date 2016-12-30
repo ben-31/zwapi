@@ -17,7 +17,7 @@ class NetConfig:
 	def __init__(self):
 		self.callback_func = None
 		self.rules_nspace = None
-		self.host = '0.0.0.0'
+		self.host = '::'
 		self.port = 55000
 
 N = NetConfig()
